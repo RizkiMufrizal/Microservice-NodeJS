@@ -1,0 +1,17 @@
+[Unit]
+Description=Kong Service
+After=syslog.target network.target
+
+[Service]
+User=root
+Group=root
+Type=forking
+ExecStart=/usr/local/bin/kong start -c /etc/kong/kong.conf
+ExecReload=/usr/local/bin/kong reload -c /etc/kong/kong.conf
+ExecStop=/usr/local/bin/kong stop
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
