@@ -57,8 +57,9 @@ proxy_listen = 0.0.0.0:8000 reuseport backlog=16384, 0.0.0.0:8443 http2 ssl reus
 23. sudo cp kong.service /etc/systemd/system
 24. sudo systemctl daemon-reload
 25. sudo systemctl enable kong.service
+26. log -> /usr/local/kong/logs
 
-curl -i -X GET http://kong.local:8000/mock/request -H 'apikey:1BasjS1MfH4w47DHb3QVbNqYfbISeRyE' -H 'Authorization: Bearer FJGtpUxbu7t5rjetHn2HlFcNsBqETaiA'
+curl -i -X GET http://kong.local:8000/mock/request -H 'apikey:1BasjS1MfH4w47DHb3QVbNqYfbISeRyE'
 
 Fqix35xwT97JxXSNG24m2OSR9GvdeJEr:5rYhrqvBICVg2NN59vjTTtEdC1zkfFsk
 
