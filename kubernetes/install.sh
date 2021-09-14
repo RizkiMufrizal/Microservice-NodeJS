@@ -51,4 +51,4 @@ sudo systemctl enable --now kubelet
 
 # config Kubernetes
 sudo vi /etc/fstab (disable swap permanent, perlu reboot) or sudo swapoff -a
-mount -a
+sudo mount -a
