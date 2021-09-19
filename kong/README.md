@@ -51,19 +51,10 @@ proxy_listen = 0.0.0.0:8000 reuseport backlog=16384, 0.0.0.0:8443 http2 ssl reus
 ```
 
 19. sudo KONG_PASSWORD=P@ssw0rd /usr/local/bin/kong migrations bootstrap -c /etc/kong/kong.conf
-20. sudo /usr/local/bin/kong start -c /etc/kong/kong.conf
-21. curl -i -X GET --url http://kong.local:8001/services
-22. docker run -p 1337:1337 -e "DB_ADAPTER=postgres" -e "DB_HOST=192.168.1.4" -e "DB_PORT=5432" -e "DB_USER=konga" -e "DB_PASSWORD=konga" -e "DB_DATABASE=konga" -e "NODE_ENV=development" -e "DB_PG_SCHEMA=public" --name konga pantsel/konga
-23. sudo cp kong.service /etc/systemd/system
-24. sudo systemctl daemon-reload
-25. sudo systemctl enable kong.service
+20. sudo cp kong.service /etc/systemd/system
+21. sudo systemctl daemon-reload
+22. sudo systemctl enable kong.service
+23. sudo systemctl start kong.service
+24. docker run -p 1337:1337 -e "DB_ADAPTER=postgres" -e "DB_HOST=192.168.1.4" -e "DB_PORT=5432" -e "DB_USER=konga" -e "DB_PASSWORD=konga" -e "DB_DATABASE=konga" -e "NODE_ENV=development" -e "DB_PG_SCHEMA=public" --name konga pantsel/konga
+25. curl -i -X GET --url http://kong.local:8001/services
 26. log -> /usr/local/kong/logs
-
-curl -i -X GET http://kong.local:8000/mock/request -H 'apikey:1BasjS1MfH4w47DHb3QVbNqYfbISeRyE'
-
-Fqix35xwT97JxXSNG24m2OSR9GvdeJEr:5rYhrqvBICVg2NN59vjTTtEdC1zkfFsk
-
-curl --location --request POST 'https://kong.local:8443/mock/oauth2/token' \
---header 'Authorization: Basic RnFpeDM1eHdUOTdKeFhTTkcyNG0yT1NSOUd2ZGVKRXI6NXJZaHJxdkJJQ1ZnMk5ONTl2alRUdEVkQzF6a2ZGc2s=' \
---header 'Content-Type: application/x-www-form-urlencoded' \
---data-urlencode 'grant_type=client_credentials' -k
