@@ -53,15 +53,35 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 sudo -s
 swapoff -a
-kubeadm init --apiserver-advertise-address=192.168.25.11 --pod-network-cidr=192.168.0.0/16
+kubeadm init --apiserver-advertise-address=192.168.25.11 --pod-network-cidr=10.244.0.0/16
 exit
 
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+#kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
 kubectl get pods --all-namespaces
+
+#disable node master jika tidak menggunakan cluster
+kubectl taint nodes --all node-role.kubernetes.io/master-
 
 kubeadm join 192.168.25.11:6443 --token yvgmu7.46ffw27b2s1fe0l9 \
   --discovery-token-ca-cert-hash sha256:6bab247baf47f7ca728b09036c98164c1c72d1f845dff8259446bc923f4d0719
+
+# Config kubernetes Dashboard
+
+# Install Metric Server
+kubectl apply -f metric-server.yaml
+
+# Install Kubernetes Dashboard
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.1/aio/deploy/recommended.yaml
+kubectl patch svc kubernetes-dashboard --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]' --namespace=kubernetes-dashboard
+kubectl get svc --namespace=kubernetes-dashboard
+
+# create account
+kubectl apply -f kubernetes-account.yaml
+
+# show token
+kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
