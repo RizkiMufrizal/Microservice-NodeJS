@@ -53,7 +53,11 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 sudo -s
 swapoff -a
-kubeadm init --apiserver-advertise-address=192.168.25.11 --pod-network-cidr=10.244.0.0/16
+# Jika hanya 1 control panel
+kubeadm init --apiserver-advertise-address=192.168.100.32 --pod-network-cidr=10.244.0.0/16
+
+# Jika Cluster Control Panel
+kubeadm init --control-plane-endpoint "10.5.5.79:6444" --upload-certs --pod-network-cidr=10.244.0.0/16
 exit
 
 mkdir -p $HOME/.kube
